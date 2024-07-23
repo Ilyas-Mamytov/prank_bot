@@ -1,4 +1,5 @@
 /venv/
 /.ipynb_checkpoints/
 /.env
-
+/discord_URL.txt
+/discord_token.txt

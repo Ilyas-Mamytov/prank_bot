@@ -3,3 +3,6 @@
 /.env
 /discord_URL.txt
 /discord_token.txt
+.idea/
+__pycache__/
+scratch.py

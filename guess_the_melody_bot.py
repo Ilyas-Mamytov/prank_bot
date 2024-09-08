@@ -29,6 +29,10 @@ async def voice(context):
 async def out_channel(context):
     await context.voice_client.disconnect()
 
+@client.command()
+async def play(context):
+    song=discord.FFmpegOpusAudio('music\\Estrelar (Remix).mp3')
+    context.voice_client.play(song)
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')

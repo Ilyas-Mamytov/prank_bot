@@ -20,19 +20,64 @@ async def hello(context):
 
 
 @client.command()
-async def voice(context):
+async def join(context):
     if not context.message.author.voice:
         await context.reply('You are not in a voice channel, Join a voice channel!')
     else:
         await context.message.author.voice.channel.connect()
+
+
 @client.command()
-async def out_channel(context):
+async def leave(context):
     await context.voice_client.disconnect()
+
 
 @client.command()
 async def play(context):
-    song=discord.FFmpegOpusAudio('music\\Estrelar (Remix).mp3')
+    song = discord.FFmpegOpusAudio('music\\Estrelar (Remix).mp3')
     context.voice_client.play(song)
+
+
+@client.command()
+async def pause(context):
+    voice = discord.utils.get(client.voice_clients, guild=context.guild)
+    if voice.is_playing():
+        voice.pause()
+    else:
+        await context.send('At the moment, there is no audio playing in the voice channel!')
+
+
+@client.command()
+async def resume(context):
+    voice = discord.utils.get(client.voice_clients, guild=context.guild)
+    if voice.is_paused():
+        voice.resume()
+    else:
+        await context.send("At the moment, no song is paused!")
+
+
+@client.command()
+async def stop(context):
+    voice = discord.utils.get(client.voice_clients, guild=context.guild)
+    voice.stop()
+
+
+@client.command()
+async def is_paused(context):
+    voice = discord.utils.get(client.voice_clients, guild=context.guild)
+    if voice.is_paused():
+        await context.send('The audio file execution is currently stopped!')
+    else:
+        await context.send('This audio file is being played!')
+
+
+@client.command()
+async def is_playing(context):
+    voice = discord.utils.get(client.voice_clients, guild=context.guild)
+    if voice.is_playing():
+        await context.send('This audio file is being played!')
+    else:
+        await context.send('The audio file is not playing right now!')
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')

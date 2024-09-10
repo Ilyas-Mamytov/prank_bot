@@ -22,9 +22,16 @@ async def hello(context):
 @client.command()
 async def join(context):
     if not context.message.author.voice:
-        await context.reply('You are not in a voice channel, Join a voice channel!')
+        await context.reply('You are not in a voice channel, join a voice channel!')
     else:
         await context.message.author.voice.channel.connect()
+
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    if after.channel:
+        if after.channel.name == 'Угадай мелодию' and len(member.voice.channel.members) >= 2 and not member.voice.channel.members=='guess the melody bot':
+            await member.voice.channel.connect()
 
 
 @client.command()
@@ -78,6 +85,7 @@ async def is_playing(context):
         await context.send('This audio file is being played!')
     else:
         await context.send('The audio file is not playing right now!')
+
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')

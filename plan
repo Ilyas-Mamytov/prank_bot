@@ -1,0 +1,7 @@
+1.write class Game():
+    1.start
+    2.controls discord bot(voice_channel)
+    3.read messages
+    4.write messages
+    5.keep score
+    6.

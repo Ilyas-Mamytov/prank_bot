@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import os
 from bot_1 import MyClient
 from discord.ext import commands
+from datetime import date, timedelta, datetime
+from dadadadadadadada import you_were_the_chosen_one
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -29,10 +31,15 @@ async def join(context):
 
 @client.event
 async def on_voice_state_update(member, before, after):
+    if member.bot:
+        return
     if after.channel:
-        if after.channel.name == 'Угадай мелодию' and len(member.voice.channel.members) >= 2 and not member.voice.channel.members=='guess the melody bot':
+        if after.channel.name == 'Угадай мелодию' and len(member.voice.channel.members) >= 2:
             await member.voice.channel.connect()
-
+@client.event
+async def on_message(message):
+    you_were_the_chosen_one(message)
+    await client.process_commands(message)
 
 @client.command()
 async def leave(context):

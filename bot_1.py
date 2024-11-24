@@ -1,8 +1,11 @@
 import os
 import discord
 from discord.ext import commands
-from datetime import date, timedelta, datetime
 from dotenv import load_dotenv
+from classes import load_music
+
+
+
 
 class MyClient(commands.Bot):
 
@@ -69,11 +72,12 @@ class MyClient(commands.Bot):
                 await message.reply(msg)
         await MyClient.process_commands(message)
 
-# if __name__=='__main__':
-#     intents = discord.Intents.default()
-#     intents.message_content = True
-#     load_dotenv()
-#     token = os.getenv('DISCORD_TOKEN')
-#
-#     client = MyClient(intents=intents)
-#     client.run(token)
+if __name__=='__main__':
+
+    intents = discord.Intents.default()
+    intents.message_content = True
+    load_dotenv()
+    token = os.getenv('DISCORD_TOKEN')
+
+    client = MyClient(intents=intents)
+    client.run(token)

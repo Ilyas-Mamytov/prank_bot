@@ -5,11 +5,18 @@ from bot_1 import MyClient
 from discord.ext import commands
 from datetime import date, timedelta, datetime
 from dadadadadadadada import you_were_the_chosen_one
+from classes import get_random_elements
+from classes import load_music, Out, Game
 
+
+MUSIC_PATH='.\\music\\'
+
+my_music = load_music(MUSIC_PATH,2)
 intents = discord.Intents.default()
 intents.message_content = True
 client = MyClient(intents=intents, command_prefix='!')
-
+client.songs=my_music
+GAME = None
 
 @client.event
 async def on_ready():
@@ -48,8 +55,21 @@ async def leave(context):
 
 @client.command()
 async def play(context):
-    song = discord.FFmpegOpusAudio('music\\Estrelar (Remix).mp3')
+    players=[player.global_name for player in context.voice_client.channel.members if not player.bot]
+    global GAME
+    GAME = Game(players,'.\\music\\')
+    song = discord.FFmpegOpusAudio(MUSIC_PATH+GAME.songs.current_song.link, options='-frames:a 500')
     context.voice_client.play(song)
+
+
+@client.command()
+async def next(context):
+    try:
+        song = discord.FFmpegOpusAudio(MUSIC_PATH + GAME.songs.next_song().link, options='-frames:a 500')
+        context.voice_client.play(song)
+    except Out:
+        await context.send('Игра заканчивается, ' + GAME.end())
+
 
 
 @client.command()
@@ -97,3 +117,4 @@ async def is_playing(context):
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 client.run(token)
+

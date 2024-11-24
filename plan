@@ -4,3 +4,7 @@
     3.read messages
     4.write messages
     5.keep score
+    5.add a function that writes '[player] получил [score]'
+    6.add a function that outputs a dictionary of players' points
+    7.add
+    8.

@@ -43,10 +43,17 @@ async def on_voice_state_update(member, before, after):
     if after.channel:
         if after.channel.name == 'Угадай мелодию' and len(member.voice.channel.members) >= 2:
             await member.voice.channel.connect()
+
+
 @client.event
 async def on_message(message):
-    you_were_the_chosen_one(message)
+    if GAME:
+        GAME.process_guess(message.content, str(message.author.global_name))
+    else:
+        await you_were_the_chosen_one(message)
     await client.process_commands(message)
+
+
 
 @client.command()
 async def leave(context):
@@ -56,6 +63,9 @@ async def leave(context):
 @client.command()
 async def play(context):
     players=[player.global_name for player in context.voice_client.channel.members if not player.bot]
+    for player in players:
+        print(player)
+        print(type(player))
     global GAME
     GAME = Game(players,'.\\music\\')
     song = discord.FFmpegOpusAudio(MUSIC_PATH+GAME.songs.current_song.link, options='-frames:a 500')
@@ -70,6 +80,12 @@ async def next(context):
     except Out:
         await context.send('Игра заканчивается, ' + GAME.end())
 
+
+@client.command()
+async def end_game(context):
+    results = GAME.end()
+    print(results)
+    await context.send(results)
 
 
 @client.command()

@@ -13,13 +13,13 @@ class Player:
 
 
 class Game:
-    def __init__(self, names_players, song_list, num_=10):
+    def __init__(self, names_players, songs_path, num_=10):
         players = [Player(i) for i in names_players]
-        self.players = {x.name:x for x in players}
+        self.players = {x.name: x for x in players}
         self.state = ''
+        print('got players')
+        song_list = os.listdir(songs_path)
         self.songs = Songs(song_list, num_)
-
-
 
     def start(self):
         self.state = 'start'
@@ -49,17 +49,13 @@ class Game:
     def outputting_players_dictionary(self):
         a = ''
         for i in self.players:
-            a += i + ' | ' + str(self.players[i].score)+'\n'
+            a += i + ' | ' + str(self.players[i].score) + '\n'
         a = a[:-1]
         return a
 
     def process_guess(self, guess, name):
         points = self.songs.calculatе_score(guess)
         self.add_points(name, points)
-
-
-
-
 
 
 def get_author_name(song):
@@ -89,7 +85,7 @@ def get_author_name(song):
 def get_random_elements(list_, num_elements):
     songs = []
     number = 0
-    len_ = len(list_)
+    len_ = len(list_)  # 40
     for random_music in range(1, num_elements + 1):
         # if songs[] != os.listdir ()[random.randint(0, len_-1)]:
         number = random.randint(0, len_ - 1)
@@ -115,7 +111,9 @@ class Out(IndexError):
 class Songs:
     def __init__(self, song_list, num_=10):
         self.number = 0
+        print('pre random elements')
         self.song_list = get_random_elements(song_list, num_)
+        print('post_random_elemetns')
         self.current_song = Song(self.song_list[0])
         print(self.song_list)
 
@@ -140,27 +138,28 @@ class Songs:
         else:
             return 0
 
-def load_music(path,num):
 
+def load_music(path, num):
     result = Songs(os.listdir(path=path), num_=num)
     return result
 
-if __name__== '__main__':
-#     my_music=load_music('.\\music',2)
-#     print(my_music.next_song().link)
-#     print(my_music.next_song().link)
-#     print(my_music.next_song().link)
-#     print(my_music.next_song().author)
-#     print(my_music.next_song().author)
-#     print(my_music.next_song().author)
-#     a=Game(['chelik', 'fugu', 'karim'])
-#     print(a.add_points('chelik', 5))
-#     print(a.add_points('fugu', 15))
-#     print(a.outputting_players_dictionary())
+
+if __name__ == '__main__':
+    #     my_music=load_music('.\\music',2)
+    #     print(my_music.next_song().link)
+    #     print(my_music.next_song().link)
+    #     print(my_music.next_song().link)
+    #     print(my_music.next_song().author)
+    #     print(my_music.next_song().author)
+    #     print(my_music.next_song().author)
+    #     a=Game(['chelik', 'fugu', 'karim'])
+    #     print(a.add_points('chelik', 5))
+    #     print(a.add_points('fugu', 15))
+    #     print(a.outputting_players_dictionary())
     # n = Game(['chelik','Karim'])
     # n.add_score_player('chelik',5)
     # print(n.end())
-    print(get_author_name("Estrelar (Remix).mp3"))
-    my_music=load_music('.\\music',2)
-    my_input = input()
-    print(my_music.calculatе_score(my_input))
+    game = Game(['chelik', 'Karim'], '.\\music\\')
+    print('end')
+    # print(game.songs.current_song.link)
+    # print(game.songs.next_song())

@@ -3,10 +3,9 @@ import argparse
 import discord
 from dotenv import load_dotenv
 import os
-from bot_1 import MyClient
+
 from discord.ext import commands
 from datetime import date, timedelta, datetime
-from dadadadadadadada import you_were_the_chosen_one
 from classes import get_random_elements
 from classes import load_music, Out, Game
 
@@ -17,7 +16,7 @@ MUSIC_PATH = '.\\music\\'
 
 intents = discord.Intents.default()
 intents.message_content = True
-client = MyClient(intents=intents, command_prefix='!')
+client = commands.Bot(intents=intents, command_prefix='!')
 GAME = None
 
 @client.event
@@ -54,8 +53,6 @@ async def on_message(message):
         return
     if GAME:
         GAME.process_guess(message.content, str(message.author.global_name))
-    else:
-        await you_were_the_chosen_one(message)
     await client.process_commands(message)
 
 

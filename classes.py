@@ -13,11 +13,10 @@ class Player:
 
 
 class Game:
-    def __init__(self, names_players, songs_path, num_=10):
+    def __init__(self, names_players, songs_path, num_):
         players = [Player(i) for i in names_players]
         self.players = {x.name: x for x in players}
         self.state = ''
-        print('got players')
         song_list = os.listdir(songs_path)
         self.songs = Songs(song_list, num_)
 
@@ -44,9 +43,16 @@ class Game:
     #     self.players[name].score += points
 
     def add_points(self, name, points):
-        self.players[name].score += points
+        try:
+            self.players[name].score += points
+        except KeyError :
+            if name == 'None':
+                return
+            self.players[name] = Player(name)
+            self.players[name].score += points
 
-    def outputting_players_dictionary(self):
+
+    def output_players_dictionary(self):
         a = ''
         for i in self.players:
             a += i + ' | ' + str(self.players[i].score) + '\n'
@@ -111,11 +117,9 @@ class Out(IndexError):
 class Songs:
     def __init__(self, song_list, num_=10):
         self.number = 0
-        print('pre random elements')
         self.song_list = get_random_elements(song_list, num_)
-        print('post_random_elemetns')
         self.current_song = Song(self.song_list[0])
-        print(self.song_list)
+
 
     def next_song(self):
         self.number += 1
@@ -145,21 +149,6 @@ def load_music(path, num):
 
 
 if __name__ == '__main__':
-    #     my_music=load_music('.\\music',2)
-    #     print(my_music.next_song().link)
-    #     print(my_music.next_song().link)
-    #     print(my_music.next_song().link)
-    #     print(my_music.next_song().author)
-    #     print(my_music.next_song().author)
-    #     print(my_music.next_song().author)
-    #     a=Game(['chelik', 'fugu', 'karim'])
-    #     print(a.add_points('chelik', 5))
-    #     print(a.add_points('fugu', 15))
-    #     print(a.outputting_players_dictionary())
-    # n = Game(['chelik','Karim'])
-    # n.add_score_player('chelik',5)
-    # print(n.end())
     game = Game(['chelik', 'Karim'], '.\\music\\')
     print('end')
-    # print(game.songs.current_song.link)
-    # print(game.songs.next_song())
+

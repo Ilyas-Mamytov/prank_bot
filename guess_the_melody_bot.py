@@ -1,3 +1,5 @@
+import argparse
+
 import discord
 from dotenv import load_dotenv
 import os
@@ -8,14 +10,14 @@ from dadadadadadadada import you_were_the_chosen_one
 from classes import get_random_elements
 from classes import load_music, Out, Game
 
+NAME_BOT = 'guess the melody bot#9057'
 
-MUSIC_PATH='.\\music\\'
+MUSIC_PATH = '.\\music\\'
 
-my_music = load_music(MUSIC_PATH,2)
+
 intents = discord.Intents.default()
 intents.message_content = True
 client = MyClient(intents=intents, command_prefix='!')
-client.songs=my_music
 GAME = None
 
 @client.event
@@ -45,8 +47,11 @@ async def on_voice_state_update(member, before, after):
             await member.voice.channel.connect()
 
 
+
 @client.event
 async def on_message(message):
+    if message.author.bot == NAME_BOT:
+        return
     if GAME:
         GAME.process_guess(message.content, str(message.author.global_name))
     else:
@@ -61,19 +66,19 @@ async def leave(context):
 
 
 @client.command()
-async def play(context):
-    players=[player.global_name for player in context.voice_client.channel.members if not player.bot]
-    for player in players:
-        print(player)
-        print(type(player))
+async def play(context, args):
+    players = [player.global_name for player in context.voice_client.channel.members if not player.bot]
+    args = int(args)
     global GAME
-    GAME = Game(players,'.\\music\\')
+    GAME = Game(players, '.\\music\\', args)
     song = discord.FFmpegOpusAudio(MUSIC_PATH+GAME.songs.current_song.link, options='-frames:a 500')
     context.voice_client.play(song)
 
 
 @client.command()
 async def next(context):
+    await context.send(GAME.output_players_dictionary())
+    await context.send(GAME.songs.current_song.author + GAME.songs.current_song.name)
     try:
         song = discord.FFmpegOpusAudio(MUSIC_PATH + GAME.songs.next_song().link, options='-frames:a 500')
         context.voice_client.play(song)
